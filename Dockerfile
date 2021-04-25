@@ -1,0 +1,20 @@
+FROM centos:centos7
+MAINTAINER scientific <soulmate.tangk@gmain.com>
+RUN mkdir -p /opt/jdk
+WORKDIR /opt/jdk
+RUN yum update\
+	&& yum install -y mercurial\
+	&& hg clone http://hg.openjdk.java.net/jdk8u/jdk8u/ openjdk8u \
+	&& cd openjdk8u && bash ./get_source.sh
+# 设置个时区，避免下一个命令提示输入时区
+RUN echo Asia/Shanghai > /etc/timezone \
+    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+# 安装编译依赖
+RUN yum install -y libx11-dev libxext-dev libxrender-dev libxtst-dev libxt-dev libcups2-dev libfreetype6-dev libasound2-dev libfontconfig1-dev ccache make gdb gcc wget unzip zip 
+
+# 下载openjdk7作为boot-jdk
+RUN wget -q https://download.java.net/openjdk/jdk7u75/ri/openjdk-7u75-b13-linux-x64-18_dec_2014.tar.gz \
+    && tar -zxf openjdk-7u75-b13-linux-x64-18_dec_2014.tar.gz \
+    && rm -rf openjdk-7u75-b13-linux-x64-18_dec_2014.tar.gz 
+WORKDIR /opt/jdk/openjdk8u
+CMD bash
