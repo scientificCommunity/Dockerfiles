@@ -3,9 +3,9 @@ MAINTAINER scientific <soulmate.tangk@gmain.com>
 RUN mkdir -p /opt/jdk
 WORKDIR /opt/jdk
 RUN yum update\
-	&& yum install -y mercurial\
-	&& hg clone http://hg.openjdk.java.net/jdk8u/jdk8u/ openjdk8u \
-	&& cd openjdk8u && bash ./get_source.sh
+	 yum install -y mercurial\
+	 hg clone http://hg.openjdk.java.net/jdk8u/jdk8u/ openjdk8u \
+	 cd openjdk8u && bash ./get_source.sh
 # 设置个时区，避免下一个命令提示输入时区
 RUN echo Asia/Shanghai > /etc/timezone \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
